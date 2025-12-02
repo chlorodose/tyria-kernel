@@ -1,0 +1,15 @@
+[package]
+name = "tyria-kernel"
+authors = ["Chlorodose <chlorodose@chlorodose.me>"]
+description = "A exo&micro kernel written in rust who focusing on not teaching userspace what to do."
+version = "0.1.0"
+readme = "README.md"
+repository = "https://github.com/chlorodose/tyria-kernel"
+license = "MIT OR Apache-2.0"
+edition = "2024"
+
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"

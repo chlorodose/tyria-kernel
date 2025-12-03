@@ -16,6 +16,9 @@ panic = "abort"
 
 [features]
 limine = ["dep:limine"]
+qemu = ["dep:qemu_print"]
 
 [dependencies]
 limine = { version = "0.5.0", optional = true }
+log = "0.4.29"
+qemu_print = {version = "0.1.0", optional = true}

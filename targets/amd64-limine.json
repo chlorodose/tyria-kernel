@@ -8,6 +8,9 @@
   "features": "-mmx,-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2,+soft-float",
   "linker": "rust-lld",
   "linker-flavor": "gnu-lld",
+  "pre-link-args": {
+    "ld.lld": ["-Ttargets/amd64-limine.ld"]
+  },
   "llvm-target": "x86_64-unknown-none-elf",
   "max-atomic-width": 64,
   "metadata": {
@@ -24,9 +27,6 @@
     "kind": "inline"
   },
   "static-position-independent-executables": true,
-  "supported-sanitizers": [
-    "kcfi",
-    "kernel-address"
-  ],
+  "supported-sanitizers": ["kcfi", "kernel-address"],
   "target-pointer-width": 64
 }

@@ -1,12 +1,14 @@
 #![no_std]
 #![no_main]
 #![feature(ptr_metadata)]
-use core::ptr::{from_raw_parts, without_provenance};
-use limine::request::MemoryMapRequest;
+use core::ptr::{from_raw_parts, without_provenance, without_provenance_mut};
+use limine::request::{HhdmRequest, MemoryMapRequest};
 use tyria_kernel::{MemoryEntry, MemoryType, main};
 
 #[used]
 static MEMORY_MAP_REQ: MemoryMapRequest = MemoryMapRequest::new();
+#[used]
+static HHDM_OFFSET_REQ: HhdmRequest = HhdmRequest::new();
 
 #[unsafe(export_name = "_start")]
 extern "C" fn start_kernel() -> ! {
@@ -26,5 +28,15 @@ extern "C" fn start_kernel() -> ! {
                 _ => MemoryType::Claimed,
             },
         });
-    main(iter);
+    main(
+        without_provenance_mut(
+            HHDM_OFFSET_REQ
+                .get_response()
+                .expect("failed to get hhdm response")
+                .offset()
+                .try_into()
+                .unwrap(),
+        ),
+        iter,
+    );
 }

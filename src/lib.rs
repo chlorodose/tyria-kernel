@@ -1,10 +1,21 @@
 #![cfg_attr(not(test), no_std)]
+#![allow(incomplete_features)]
+#![feature(
+    generic_const_exprs,
+    inherent_associated_types,
+    int_lowest_highest_one,
+    isolate_most_least_significant_one,
+    never_type
+)]
 
 use log::{error, info};
 
-mod arch;
-mod pollyfill;
+use crate::page::HhdmPhyPageAccessor;
+
+pub mod arch;
+mod utils;
 extern crate alloc;
+pub mod page;
 
 #[cfg(feature = "qemu")]
 mod qemu;
@@ -25,10 +36,16 @@ pub struct MemoryEntry {
     pub area: *const [u8],
     pub ty: MemoryType,
 }
+/// Kernel's main entry
 #[allow(clippy::missing_panics_doc, clippy::needless_pass_by_value)]
-pub fn main(memory_map: impl Iterator<Item = MemoryEntry> + Clone + 'static) -> ! {
+pub fn main(
+    hhdm_offset: *mut (),
+    memory_map: impl DoubleEndedIterator<Item = MemoryEntry> + Clone + 'static,
+) -> ! {
     #[cfg(feature = "qemu")]
     qemu::set_qemu_log();
+
+    let accssor = HhdmPhyPageAccessor::new(hhdm_offset);
 
     info!("Kernel starting...");
     let first_free = memory_map

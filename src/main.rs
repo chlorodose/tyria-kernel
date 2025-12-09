@@ -1,9 +1,20 @@
 #![cfg_attr(not(test), no_std)]
+#![cfg_attr(not(test), no_main)]
+#![allow(incomplete_features)]
+#![feature(
+    generic_const_exprs,
+    inherent_associated_types,
+    int_lowest_highest_one,
+    isolate_most_least_significant_one,
+    never_type,
+    ptr_metadata
+)]
 
 use log::{error, info};
 
-mod arch;
-mod pollyfill;
+pub mod arch;
+mod bootloader;
+mod utils;
 extern crate alloc;
 
 #[cfg(feature = "qemu")]
@@ -25,8 +36,10 @@ pub struct MemoryEntry {
     pub area: *const [u8],
     pub ty: MemoryType,
 }
+
+/// Kernel's main entry
 #[allow(clippy::missing_panics_doc, clippy::needless_pass_by_value)]
-pub fn main(memory_map: impl Iterator<Item = MemoryEntry> + Clone + 'static) -> ! {
+pub fn main(memory_map: impl DoubleEndedIterator<Item = MemoryEntry> + Clone + 'static) -> ! {
     #[cfg(feature = "qemu")]
     qemu::set_qemu_log();
 

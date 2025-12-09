@@ -16,4 +16,4 @@ cp "$(basename "$1")" boot/kernel.elf
 
 sudo -E qemu-system-x86_64 -enable-kvm -cpu host -m 1G -smp 4 -bios boot/OVMF.fd \
     -serial stdio -monitor telnet::4444,server,nowait -nographic \
-    -hda fat:rw:boot
+    -drive file=fat:rw:boot,format=raw

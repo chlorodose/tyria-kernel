@@ -2,4 +2,5 @@
 runner = "targets/amd64-limine.sh"
 
 [unstable]
-build-std = ["core", "compiler_builtins", "alloc"]
+build-std = ["core", "compiler_builtins", "panic_abort", "alloc"]
+build-std-features = []

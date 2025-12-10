@@ -14,6 +14,7 @@ use log::{error, info};
 
 pub mod arch;
 mod bootloader;
+pub mod sync;
 mod utils;
 extern crate alloc;
 

@@ -23,5 +23,7 @@ qemu = ["dep:qemu_print"]
 
 [dependencies]
 limine = { version = "0.5.0", optional = true }
+lock_api = { version = "0.4.14", features = ["nightly"] }
 log = "0.4.29"
 qemu_print = {version = "0.1.0", optional = true}
+thiserror = { version = "2.0.17", default-features = false }
